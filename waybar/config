@@ -1,0 +1,165 @@
+{
+	"layer": "top",
+    "margin": "0 0 0 0",
+    "exclusive": true,
+	"modules-left": ["custom/launcher", "hyprland/workspaces","hyprland/window" , "tray"],
+	"modules-center": ["clock", "idle_inhibitor", ],
+	"modules-right": [
+		"backlight",
+		"battery",
+		"temperature",
+		"cpu",
+		"memory",
+		"pulseaudio",
+		"network",
+		"custom/wallpaper",
+        "custom/power"
+	],
+	"pulseaudio": {
+		"tooltip": false,
+		"scroll-step": 5,
+		"format": "{icon} {volume}%",
+		"format-muted": "{icon} {volume}%",
+		"on-click":"pactl set-sink-mute @DEFAULT_SINK@ toggle",
+		"format-icons": {
+			"default": ["", "", ""]
+		}
+	},
+    "hyprland/window": {
+        "format": " {title} {class}",
+        "rewrite": {
+            "(.*) — Mozilla Firefox(.*)": "🌎 $1",
+            "(.*) nvim (.*) kitty": "💻   $2",
+            "(.*)kitty" : "💻 $1",
+        },
+        "separate-outputs": true
+    },
+    "hyprland/workspaces": {
+        "show-special": true,
+        "all-outputs": true,
+        "format": "{icon}",
+        "on-click": "activate",
+        "format-icons": {
+            "1" : "  ",
+            "2" : "  ",
+            "3" : " 󰎞 ",
+            "4" : "  ",
+            "5" : " 󰺵 ",
+            "6" : "  ",
+            "7" : " 󰲌 ",
+            "urgent" : "  ",
+            "focused" : "  ",
+            "default" : "  "
+        },
+        "active-only": false,
+        "sort-by-number": true
+    },
+    "idle_inhibitor": {
+        "format" : "{icon}",
+        "format-icons" : {
+            "activated" : "  ",
+            "deactivated" : "  "
+        }
+    },
+    "network": {
+        "interval": 5,
+        "tooltip": true,
+        "format-wifi": "{icon}  {essid} | {bandwidthDownBytes}",
+        "format-ethernet": "",
+        "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
+        "format-disconnected": "󰤭",
+        "tooltip-format" : "{ifname} {ipaddr} 
+    Up: {bandwidthUpBits}
+    Down: {bandwidthDownBits}"
+    },
+    "backlight": {
+        "tooltip": false,
+        "format": " {}%",
+        "interval":1,
+        "on-scroll-up": "light -A 5",
+        "on-scroll-down": "light -U 5"
+    },
+    "battery": {
+        "states": {
+            "good": 95,
+            "warning": 30,
+            "critical": 20
+        },
+        "format": "{icon}  {capacity}%",
+        "format-charging": " {capacity}%",
+        "format-plugged": " {capacity}%",
+        "format-alt": "{time} {icon}",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "tray":{
+		"icon-size":18,
+		"spacing": 10
+    },
+    "clock": {
+        "interval": 5,
+        "format": "󰃰 {:%a, %d %b, %I:%M %p}", // "{: %I:%M %p   %d/%m/%Y}",
+        "tooltip-format" : "<tt><small>{calendar}</small></tt>",
+        "calendar" : {
+            "mode" : "month",
+            "mode-mon-col" : 3,
+            "weeks-pos" : "right",
+            "on-scroll" : 1,
+            "on-click-right" : "mode",
+            "format" : {
+                "months" : "<span color='#cba6f7'><b>{}</b></span>",
+                "days" : "<span color='#b4befe'><b>{}</b></span>",
+                "weeks" : "<span color='#89dceb'><b>W{}</b></span>",
+                "weekdays" : "<span color='#f2cdcd'><b>{}</b></span>",
+                "today" : "<span color='#f38ba8'><b><u>{}</u></b></span>"
+            }
+        }
+    },
+    "cpu": {
+        "interval": 10,
+        // "format": " {}%",
+        "max-length": 10,
+	"format": "{icon} {usage}%",
+     	"format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
+    },
+    "memory": {
+        "interval": 30,
+        "format": " {}%",
+        "max-length": 10
+    },
+    "temperature": {
+	    "format": "{temperatureC}°C "
+    },
+    "custom/media": {
+        "interval": 30,
+        "format": "{icon} {}",
+        "return-type": "json",
+        "max-length": 20,
+        "format-icons": {
+            "spotify": " ",
+            "default": " "
+        },
+        "escape": true,
+        "exec": "$HOME/.config/system_scripts/mediaplayer.py 2> /dev/null",
+        "on-click": "playerctl play-pause"
+    },
+    "custom/launcher":{
+        "format": "   ",
+        "on-click": "rofi -show drun",
+        "on-click-right": "killall rofi"
+    },
+    "custom/power":{
+        "format": " ",
+        "on-click": "bash ~/.config/rofi/leave/leave.sh",
+    },
+    "custom/updates":{
+        "format": "{} Update(s)",
+        "exec": "checkupdates | wc -l",
+        "exec-if": "[[ $(checkupdates | wc -l) != 0 ]]",
+        "interval": 15,
+        "on-click": "alacritty -e paru -Syu && notify-send 'The system has been updated' "
+    },
+    "custom/wallpaper":{
+        "format":"   ",
+        "on-click": "bash ~/.config/system_scripts/pkill_bc"
+    }
+}
